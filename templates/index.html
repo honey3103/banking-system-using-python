@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bank Management System - Login</title>
+    <!-- Use Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Use FontAwesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+
+    <div class="glass-panel" id="loginPanel">
+        <h2><i class="fa-solid fa-building-columns"></i> Secure Banking</h2>
+        <p style="text-align: center; color: var(--text-secondary); margin-bottom: 2rem;">Log in to access your dashboard</p>
+        
+        <form id="loginForm">
+            <div class="form-group">
+                <label for="accountNo">Account Number or 'admin'</label>
+                <input type="text" id="accountNo" class="form-control" required placeholder="e.g. 1234567890">
+            </div>
+            <div class="form-group">
+                <label for="pin">Secure PIN</label>
+                <input type="password" id="pin" class="form-control" required placeholder="****">
+            </div>
+            
+            <button type="submit" class="btn">
+                <i class="fa-solid fa-arrow-right-to-bracket"></i> Login
+            </button>
+        </form>
+        
+        <div style="text-align: center; margin-top: 1.5rem;">
+            <p style="font-size: 0.875rem; color: var(--text-secondary);">
+                Don't have an account? 
+                <a href="#" id="showRegister" style="color: var(--accent-color); text-decoration: none;">Register</a>
+            </p>
+        </div>
+    </div>
+
+    <!-- Registration Panel (Hidden by default) -->
+    <div class="glass-panel hidden" id="registerPanel">
+        <h2><i class="fa-solid fa-user-plus"></i> Open Account</h2>
+        
+        <form id="registerForm">
+            <div class="form-group">
+                <label for="regName">Full Name</label>
+                <input type="text" id="regName" class="form-control" required>
+            </div>
+            <div class="form-group">
+                <label for="regMobile">Mobile Number</label>
+                <input type="tel" id="regMobile" class="form-control" required>
+            </div>
+            <div class="form-group">
+                <label for="regEmail">Email Address</label>
+                <input type="email" id="regEmail" class="form-control" required>
+            </div>
+            <div class="form-group">
+                <label for="regPin">4-Digit PIN</label>
+                <input type="password" id="regPin" class="form-control" required pattern="\d{4}" title="Must be exactly 4 digits">
+            </div>
+            
+            <button type="submit" class="btn">
+                <i class="fa-solid fa-check"></i> Register
+            </button>
+        </form>
+        
+        <div style="text-align: center; margin-top: 1.5rem;">
+            <p style="font-size: 0.875rem; color: var(--text-secondary);">
+                Already have an account? 
+                <a href="#" id="showLogin" style="color: var(--accent-color); text-decoration: none;">Login</a>
+            </p>
+        </div>
+    </div>
+
+    <!-- OTP Modal -->
+    <div class="modal" id="otpModal">
+        <div class="modal-content">
+            <h3><i class="fa-solid fa-shield-halved"></i> OTP Verification</h3>
+            <p style="color: var(--text-secondary); margin-bottom: 1.5rem; font-size: 0.875rem;">
+                A one-time password has been sent to your registered email (Check terminal).
+            </p>
+            <div class="form-group">
+                <label>Enter 6-Digit OTP</label>
+                <input type="text" id="otpInput" class="form-control" maxlength="6">
+            </div>
+            <button id="verifyOtpBtn" class="btn" style="margin-bottom: 0.5rem;">Verify & Proceed</button>
+            <button id="cancelOtpBtn" class="btn btn-secondary">Cancel</button>
+        </div>
+    </div>
+
+    <script src="/static/main.js"></script>
+</body>
+</html>

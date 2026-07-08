@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard - Secure Bank</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+
+    <div class="dashboard-container">
+        <div class="dashboard-header">
+            <div>
+                <h2 style="margin:0; color: var(--danger-color);"><i class="fa-solid fa-user-shield"></i> Admin Panel</h2>
+                <p style="color: var(--text-secondary);">Manage Bank Operations</p>
+            </div>
+            <button class="btn btn-secondary" style="width: auto;" onclick="logout()">
+                <i class="fa-solid fa-power-off"></i> Logout
+            </button>
+        </div>
+
+        <div class="grid-cards" style="grid-template-columns: repeat(2, 1fr);">
+            <div class="balance-card" style="margin-bottom:0;">
+                <div>
+                    <p style="color: rgba(255,255,255,0.7); text-transform: uppercase; font-size: 0.875rem;">Total Bank Deposits</p>
+                    <div class="balance-amount" id="totalDeposits">₹0.00</div>
+                </div>
+            </div>
+            <div class="balance-card" style="margin-bottom:0; background: linear-gradient(135deg, rgba(239,68,68,0.2) 0%, rgba(220,38,38,0.1) 100%); border-color: rgba(239, 68, 68, 0.3);">
+                <div>
+                    <p style="color: rgba(255,255,255,0.7); text-transform: uppercase; font-size: 0.875rem;">Pending Loan Requests</p>
+                    <div class="balance-amount" id="pendingLoanCount">0</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="glass-panel" style="max-width: 100%; margin-top: 2rem;">
+            <h3>Pending Loan Approvals</h3>
+            <div style="overflow-x: auto;">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Loan ID</th>
+                            <th>Account No</th>
+                            <th>Amount</th>
+                            <th>Date</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody id="loanTableBody">
+                        <!-- Filled by JS -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div class="glass-panel" style="max-width: 100%; margin-top: 2rem;">
+            <h3>All Bank Transactions</h3>
+            <div style="overflow-x: auto;">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Account No</th>
+                            <th>Type</th>
+                            <th>Amount</th>
+                            <th>Date</th>
+                        </tr>
+                    </thead>
+                    <tbody id="allTxTableBody">
+                        <!-- Filled by JS -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <script src="/static/main.js"></script>
+    <script>
+        document.addEventListener("DOMContentLoaded", loadAdminDashboard);
+    </script>
+</body>
+</html>

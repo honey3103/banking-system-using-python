@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Customer Dashboard - Secure Bank</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="/static/style.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+
+    <div class="dashboard-container">
+        <div class="dashboard-header">
+            <div>
+                <h2 style="margin:0;"><i class="fa-solid fa-building-columns"></i> Secure Bank</h2>
+                <p style="color: var(--text-secondary);" id="welcomeMessage">Welcome back!</p>
+            </div>
+            <button class="btn btn-secondary" style="width: auto;" onclick="logout()">
+                <i class="fa-solid fa-power-off"></i> Logout
+            </button>
+        </div>
+
+        <div class="balance-card">
+            <div>
+                <p style="color: rgba(255,255,255,0.7); text-transform: uppercase; letter-spacing: 1px; font-size: 0.875rem;">Available Balance</p>
+                <div class="balance-amount" id="balanceAmount">₹0.00</div>
+            </div>
+            <div style="text-align: right;">
+                <p style="color: rgba(255,255,255,0.7); font-size: 0.875rem;">Credit Card</p>
+                <div style="font-size: 1.25rem; font-weight: 600; color: var(--accent-color);" id="ccStatus">Not Applied</div>
+                <div style="font-size: 0.875rem; color: rgba(255,255,255,0.7);" id="ccLimit"></div>
+            </div>
+            <div style="text-align: right;">
+                <p style="color: rgba(255,255,255,0.7); font-size: 0.875rem;">Active Loan</p>
+                <div style="font-size: 1.5rem; font-weight: 600; color: var(--danger-color);" id="loanAmount">₹0.00</div>
+            </div>
+        </div>
+
+        <div class="grid-cards">
+            <div class="glass-panel action-card" style="width:100%" onclick="showModal('transferModal')">
+                <i class="fa-solid fa-money-bill-transfer"></i>
+                <h3>Transfer Funds</h3>
+                <p style="font-size: 0.875rem; color: var(--text-secondary);">Send money instantly to any account.</p>
+            </div>
+            <div class="glass-panel action-card" style="width:100%" onclick="showModal('depositModal')">
+                <i class="fa-solid fa-piggy-bank"></i>
+                <h3>Deposit</h3>
+                <p style="font-size: 0.875rem; color: var(--text-secondary);">Add funds to your account.</p>
+            </div>
+            <div class="glass-panel action-card" style="width:100%" onclick="showModal('withdrawModal')">
+                <i class="fa-solid fa-money-bill-wave"></i>
+                <h3>Withdraw</h3>
+                <p style="font-size: 0.875rem; color: var(--text-secondary);">Take out cash securely.</p>
+            </div>
+            <div class="glass-panel action-card" style="width:100%" onclick="showModal('loanModal')">
+                <i class="fa-solid fa-hand-holding-dollar"></i>
+                <h3>Request Loan</h3>
+                <p style="font-size: 0.875rem; color: var(--text-secondary);">Apply for instant credit.</p>
+            </div>
+            <div class="glass-panel action-card" style="width:100%" onclick="showModal('ccModal')">
+                <i class="fa-solid fa-credit-card"></i>
+                <h3>Credit Card</h3>
+                <p style="font-size: 0.875rem; color: var(--text-secondary);">Manage your card.</p>
+            </div>
+        </div>
+        
+
+        <div class="glass-panel" style="max-width: 100%;">
+            <div style="display: flex; justify-content: space-between; align-items: center;">
+                <h3 style="margin:0;">Recent Transactions</h3>
+                <div>
+                    <button class="btn btn-secondary" style="width: auto; padding: 0.5rem 1rem; display: inline-flex;" onclick="downloadStatementCSV()">
+                        <i class="fa-solid fa-file-csv"></i> CSV
+                    </button>
+                    <button class="btn btn-secondary" style="width: auto; padding: 0.5rem 1rem; display: inline-flex;" onclick="downloadStatement()">
+                        <i class="fa-solid fa-file-pdf"></i> PDF
+                    </button>
+                </div>
+            </div>
+            <div style="overflow-x: auto;">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Date</th>
+                            <th>Type</th>
+                            <th>Amount</th>
+                            <th>Balance After</th>
+                        </tr>
+                    </thead>
+                    <tbody id="transactionTableBody">
+                        <!-- Filled by JS -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modals -->
+    <!-- Transfer Modal -->
+    <div class="modal" id="transferModal">
+        <div class="modal-content">
+            <h3>Transfer Funds</h3>
+            <div class="form-group">
+                <label>Recipient Account Number</label>
+                <input type="text" id="transferAcc" class="form-control">
+            </div>
+            <div class="form-group">
+                <label>Amount (₹)</label>
+                <input type="number" id="transferAmt" class="form-control">
+            </div>
+            <button class="btn" onclick="submitTransfer()">Transfer</button>
+            <button class="btn btn-secondary" style="margin-top:0.5rem;" onclick="closeModal('transferModal')">Cancel</button>
+        </div>
+    </div>
+
+    <!-- Deposit Modal -->
+    <div class="modal" id="depositModal">
+        <div class="modal-content">
+            <h3>Deposit Funds</h3>
+            <div class="form-group">
+                <label>Amount (₹)</label>
+                <input type="number" id="depositAmt" class="form-control">
+            </div>
+            <button class="btn" onclick="submitDeposit()">Deposit</button>
+            <button class="btn btn-secondary" style="margin-top:0.5rem;" onclick="closeModal('depositModal')">Cancel</button>
+        </div>
+    </div>
+
+    <!-- Withdraw Modal -->
+    <div class="modal" id="withdrawModal">
+        <div class="modal-content">
+            <h3>Withdraw Funds</h3>
+            <div class="form-group">
+                <label>Amount (₹)</label>
+                <input type="number" id="withdrawAmt" class="form-control">
+            </div>
+            <button class="btn" onclick="submitWithdraw()">Withdraw</button>
+            <button class="btn btn-secondary" style="margin-top:0.5rem;" onclick="closeModal('withdrawModal')">Cancel</button>
+        </div>
+    </div>
+
+    <!-- Loan Modal -->
+    <div class="modal" id="loanModal">
+        <div class="modal-content">
+            <h3>Request Loan</h3>
+            <div class="form-group">
+                <label>Amount (₹)</label>
+                <input type="number" id="loanAmt" class="form-control">
+            </div>
+            <button class="btn" onclick="submitLoan()">Request</button>
+            <button class="btn btn-secondary" style="margin-top:0.5rem;" onclick="closeModal('loanModal')">Cancel</button>
+        </div>
+    </div>
+    
+    <!-- CC Modal -->
+    <div class="modal" id="ccModal">
+        <div class="modal-content">
+            <h3>Credit Card Services</h3>
+            <div id="ccOptions" class="hidden">
+                <button class="btn" onclick="requestCard()">Apply for Card (₹50,000 Limit)</button>
+            </div>
+            <div id="ccActive" class="hidden">
+                <div class="form-group">
+                    <label>Spend Amount (₹)</label>
+                    <input type="number" id="ccSpendAmt" class="form-control">
+                </div>
+                <button class="btn" style="margin-bottom:0.5rem;" onclick="spendCC()">Make Purchase</button>
+                <div class="form-group" style="margin-top: 1rem;">
+                    <label>Pay Bill (₹)</label>
+                    <input type="number" id="ccPayAmt" class="form-control">
+                </div>
+                <button class="btn btn-secondary" onclick="payCC()">Pay Bill</button>
+            </div>
+            <button class="btn btn-secondary" style="margin-top:1rem;" onclick="closeModal('ccModal')">Close</button>
+        </div>
+    </div>
+    
+    <!-- Crypto Modal -->
+    <div class="modal" id="cryptoModal">
+        <div class="modal-content">
+            <h3>Bitcoin Wallet (BTC)</h3>
+            <p style="font-size: 0.875rem; color: var(--text-secondary); margin-bottom: 1rem;" id="cryptoRate">Current Rate: ₹...</p>
+            
+            <div class="form-group">
+                <label>Buy BTC (Amount in INR ₹)</label>
+                <div style="display: flex; gap: 0.5rem;">
+                    <input type="number" id="buyCryptoAmt" class="form-control" style="flex:1;">
+                    <button class="btn" style="width: auto;" onclick="buyCrypto()">Buy</button>
+                </div>
+            </div>
+            
+            <div class="form-group" style="margin-top: 1.5rem;">
+                <label>Sell BTC (Amount in BTC)</label>
+                <div style="display: flex; gap: 0.5rem;">
+                    <input type="number" id="sellCryptoAmt" class="form-control" style="flex:1;" step="0.000001">
+                    <button class="btn btn-secondary" style="width: auto; background: var(--danger-color); color: white;" onclick="sellCrypto()">Sell</button>
+                </div>
+            </div>
+            
+            <button class="btn btn-secondary" style="margin-top:1rem;" onclick="closeModal('cryptoModal')">Close</button>
+        </div>
+    </div>
+
+    <script src="/static/main.js"></script>
+    <script>
+        // Auto-load dashboard data
+        document.addEventListener("DOMContentLoaded", loadDashboard);
+    </script>
+</body>
+</html>
